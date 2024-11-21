@@ -6,11 +6,12 @@ import connectDB from './utils/db.js'
 import userRoute from './routes/userRouter.js'
 import postRoute from './routes/postRoutes.js'
 import messageRoute from './routes/messageRoutes.js'
+import { app,server } from './socket/socket.js'
 
 
 
 
-const app = express()
+
 
 app.get("/",(req,res)=>{
     return res.status(200).json({
@@ -38,7 +39,7 @@ app.use("/api/v1/message",messageRoute)
 
 
 
-app.listen(PORT,()=>{
+server.listen(PORT,()=>{
     connectDB()
     console.log(`Server is running at port ${PORT}`)
 })
