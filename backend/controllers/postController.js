@@ -3,6 +3,7 @@ import cloudinary from '../utils/cloudinary.js';
 import { Post } from '../models/postModel.js';
 import { User } from '../models/userModel.js';
 import { Comment } from '../models/commentModel.js';
+import { getReceiverSocketId } from '../socket/socket.js';
 
 
 export const addNewPost = async(req,res)=>{
@@ -86,12 +87,27 @@ export const getUserPost = async(req,res)=>{
 
 export const likePost = async(req,res)=>{
     try {
-        const user = req.id;
+        const userId = req.id;
         const postId = req.params.id;
         const post = await Post.findById(postId);
         if(!post) return res.status(404).json({message:'Post not found',success:false});
-        await post.updateOne({$addToSet:{likes:user}})
+        await post.updateOne({$addToSet:{likes:userId}})
         await post.save()
+
+        const user = await User.findById(userId).select('username profilePicture')
+        const postOwnerId = post.author.toString();
+        if(postOwnerId !== userId){
+            const notification ={
+                type:'like',
+                userId:userId,
+                userDetails:user,
+                postId,
+                message:'Your post was liked'
+            }
+
+            const postOwnerSocketId = await getReceiverSocketId(postOwnerId)
+            io.to(postOwnerSocketId).emit('notification',notification)
+        }
 
         return res.status(200).json({message:'Post liked',success:true})
     } catch (error) {
@@ -101,12 +117,27 @@ export const likePost = async(req,res)=>{
 
 export const disLikePost = async(req,res)=>{
     try {
-        const user = req.id;
+        const userId = req.id;
         const postId = req.params.id;
         const post = await Post.findById(postId);
         if(!post) return res.status(404).json({message:'Post not found',success:false});
-        await post.updateOne({$pull:{likes:user}})
+        await post.updateOne({$pull:{likes:userId}})
         await post.save()
+
+        const user = await User.findById(userId).select('username profilePicture')
+        const postOwnerId = post.author.toString();
+        if(postOwnerId !== userId){
+            const notification ={
+                type:'dislike',
+                userId:userId,
+                userDetails:user,
+                postId,
+                message:'Your post was liked'
+            }
+
+            const postOwnerSocketId = await getReceiverSocketId(postOwnerId)
+            io.to(postOwnerSocketId).emit('notification',notification)
+        }
 
         return res.status(200).json({message:'Post disLiked',success:true})
     } catch (error) {
