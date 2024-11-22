@@ -13,14 +13,14 @@ const useGetAllMessages=()=>{
                 const res = await axios.get(`http://localhost:8000/api/v1/message/all/${selectedUser?._id}`,{withCredentials:true})
                 if(res.data.success){
                     
-                    dispatch(setMessages(res.data.message))
+                    dispatch(setMessages(res.data.messages))
                 }
             } catch (error) {
                 console.log(error)
             }
         }
         fetchAllMessage()
-    },[])
+    },[selectedUser])
 }
 
 export default useGetAllMessages

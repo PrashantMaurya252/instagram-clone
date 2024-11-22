@@ -30,7 +30,7 @@ const Messages = ({ selectedUser }) => {
             return (
               <div key={index} className={`flex`}>
                 <div>
-                  {message}
+                  {message.message}
                 </div>
               </div>
             )
