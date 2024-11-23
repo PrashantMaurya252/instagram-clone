@@ -15,12 +15,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { setAuthUser } from "@/redux/authSlice";
 import { useState } from "react";
 import CreatePost from "./CreatePost";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { Button } from "./ui/button";
 
 const LeftSidebar = () => {
   const navigate = useNavigate();
   const { user } = useSelector((store) => store.auth);
+  const {likeNotification} = useSelector(store=>store.realTimeNotification)
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
+
+
   const logoutHandler = async () => {
     try {
       const res = await axios.get("http://localhost:8000/api/v1/user/logout", {
@@ -82,6 +87,34 @@ const LeftSidebar = () => {
             >
               {item.icon}
               <span>{item.text}</span>
+              {
+                item.text === 'Notifications' && likeNotification.length > 0 && (
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button size='icon' className = 'rounded-full h-5 w-5 absolute bottom-6 left-6'>{likeNotification.length}</Button>
+                    </PopoverTrigger>
+                    <PopoverContent>
+                      <div>
+                        {
+                          likeNotification.length === 0 ? (<p>No new Notification</p>):(
+                            likeNotification.map((notification)=>{
+                              return (
+                                <div key={notification.userId}>
+                                  <Avatar>
+                                    <AvatarImage src={notification?.userDetails?.profilePicture}/>
+                                    <AvatarFallback>CN</AvatarFallback>
+                                  </Avatar>
+                                  <p className="text-sm"><span className="font-bold">{notification?.userDetails?.username} </span>liked your post</p>
+                                </div>
+                              )
+                            })
+                          )
+                        }
+                      </div>
+                    </PopoverContent>
+                  </Popover>
+                )
+              }
             </div>
           );
         })}
