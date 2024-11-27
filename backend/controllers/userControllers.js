@@ -220,3 +220,31 @@ export const followOrUnfollow = async(req,res)=>{
     console.log(error,"followOrUnfollow api error")
   }
 }
+
+export const getAllTheFollowers = async (req,res) => {
+  try {
+    const userId = req.params.id;
+    const user = await User.findById(userId).select("-password");
+    if (!user) {
+      return res.status(400).json({ message: "no user found", success: false });
+    }
+
+    const userFollowers = await User.find({
+      _id: { $in: user.followers },
+    }).select("_id username profilePicture");
+
+    console.log(userFollowers,"userfollowers")
+
+    return res.status(200).json({
+      message: "Followers retrieved successfully",
+      success: true,
+      userFollowers,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Server Error",
+      success: false,
+      error: error.message,
+    });
+  }
+};

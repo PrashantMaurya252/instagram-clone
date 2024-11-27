@@ -12,14 +12,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { setSocket } from "./redux/socketSlice";
 import { setOnlineUsers } from "./redux/chatSlice";
 import { setLikeNotification } from "./redux/rtnSlice";
+import ProtectedRoutes from "./components/ProtectedRoutes";
+import FollowersPage from "./components/FollowersPage";
 const browserRouter = createBrowserRouter([
   {
     path: "/",
-    element: <MainLayout />,
+    element: <ProtectedRoutes><MainLayout /> </ProtectedRoutes> ,
     children: [
       {
         path: "/",
-        element: <Home />,
+        element:<ProtectedRoutes><Home /></ProtectedRoutes> ,
       },
       {
         path: "/profile/:id",
@@ -27,11 +29,15 @@ const browserRouter = createBrowserRouter([
       },
       {
         path: "/account/edit",
-        element: <EditProfile />,
+        element: <ProtectedRoutes><EditProfile /></ProtectedRoutes> ,
       },
       {
         path: "/chat",
-        element: <ChatPage/>,
+        element: <ProtectedRoutes><ChatPage/></ProtectedRoutes> ,
+      },
+      {
+        path: "/followers/:id",
+        element: <ProtectedRoutes><FollowersPage/></ProtectedRoutes> ,
       },
     ],
   },
@@ -63,10 +69,12 @@ function App() {
 
       // listening all the events
       socketio.on('getOnlineUsers',(onlineUsers)=>{
+        console.log(onlineUsers,"online users")
         dispatch(setOnlineUsers(onlineUsers))
       })
 
-      socket.on('notification',(notification)=>{
+      socketio.on('notification',(notification)=>{
+        console.log(notification,"notification frontend")
         dispatch(setLikeNotification(notification))
       })
 

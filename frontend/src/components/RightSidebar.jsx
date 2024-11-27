@@ -26,7 +26,7 @@ const RightSidebar = () => {
           </span>
         </div>
       </div>
-      <SuggestedUser/>
+      <SuggestedUser authuser={user}/>
     </div>
   );
 };

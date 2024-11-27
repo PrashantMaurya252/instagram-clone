@@ -1,7 +1,14 @@
 import { AvatarImage } from "@radix-ui/react-avatar";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
-import { Bookmark, MessageCircle, MoreHorizontal, Send } from "lucide-react";
+import {
+  Bookmark,
+  BookmarkCheckIcon,
+  BookMarked,
+  MessageCircle,
+  MoreHorizontal,
+  Send,
+} from "lucide-react";
 import { Button } from "./ui/button";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import CommentDialog from "./CommentDialog";
@@ -11,16 +18,18 @@ import { toast } from "sonner";
 import axios from "axios";
 import { setPosts, setSelectedPost } from "@/redux/postSlice";
 import { Badge } from "./ui/badge";
+import { setAuthUser, setUserProfile } from "@/redux/authSlice";
 
 const Post = ({ post }) => {
   const [text, setText] = useState("");
   const [open, setOpen] = useState(false);
-  const { user } = useSelector((store) => store.auth);
+  const { userProfile, user } = useSelector((store) => store.auth);
   const { posts } = useSelector((store) => store.post);
   const dispatch = useDispatch();
   const [liked, setLiked] = useState(post.likes.includes(user?._id) || false);
   const [postLike, setPostLike] = useState(post?.likes.length);
   const [comment, setComment] = useState(post?.comments);
+  const [bookmarks, setBookmarks] = useState(user?.bookmarks);
 
   const changeEventHandler = (e) => {
     const inputText = e.target.value;
@@ -112,6 +121,30 @@ const Post = ({ post }) => {
       toast.error(error.response.data.message);
     }
   };
+
+  const bookmarkHandler = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:8000/api/v1/post/${post._id}/bookmark`,
+        { withCredentials: true }
+      );
+      if (res.data.success) {
+        let bookmarkData;
+        if (res.data.type === "saved") {
+          bookmarkData = [...bookmarks, post._id];
+        } else if (res.data.type === "unsaved") {
+          bookmarkData = bookmarks?.filter((item) => item !== post._id);
+        }
+
+        setBookmarks(bookmarkData);
+        dispatch(setAuthUser({ ...user, bookmarks: bookmarkData }));
+        toast.success(res.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message);
+    }
+  };
   return (
     <div className="my-8 w-full max-w-sm mx-auto">
       <div className="flex items-center justify-between">
@@ -122,7 +155,9 @@ const Post = ({ post }) => {
           </Avatar>
           <div className="flex items-center gap-3">
             <h1>{post.author?.username}</h1>
-            {user?._id === post?.author?._id && <Badge variant="secondry">Author</Badge>}
+            {user?._id === post?.author?._id && (
+              <Badge variant="secondry">Author</Badge>
+            )}
           </div>
         </div>
         <Dialog>
@@ -130,12 +165,15 @@ const Post = ({ post }) => {
             <MoreHorizontal className="cursor-pointer" />
           </DialogTrigger>
           <DialogContent className="flex flex-col text-sm text-center">
-            <Button
-              variant="ghost"
-              className="cursor-pointer w-fit text-[#ED4956] font-bold"
-            >
-              Unfollow
-            </Button>
+            {post?.author?._id !== user?._id && (
+              <Button
+                variant="ghost"
+                className="cursor-pointer w-fit text-[#ED4956] font-bold"
+              >
+                Unfollow
+              </Button>
+            )}
+
             <Button variant="ghost" className="cursor-pointer w-fit ">
               Add to favorites
             </Button>
@@ -183,7 +221,16 @@ const Post = ({ post }) => {
           />
           <Send className="cursor-pointer hover:text-gray-600" />
         </div>
-        <Bookmark className="cursor-pointer hover:text-gray-600" />
+        <div className={`${user._id === post?.author._id ? 'hidden':''}`}>
+        {bookmarks?.includes(post?._id) ? (
+          <BookmarkCheckIcon onClick={bookmarkHandler} />
+        ) : (
+          <Bookmark
+            onClick={bookmarkHandler}
+            className="cursor-pointer hover:text-gray-600"
+          />
+        )}
+        </div>
       </div>
       <span className="font-medium block mb-2">{postLike} likes</span>
       <p>

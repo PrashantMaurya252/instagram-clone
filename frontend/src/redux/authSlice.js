@@ -8,6 +8,7 @@ const authSlice = createSlice({
         suggestedUsers:[],
         userProfile:null,
         selectedUser:null,
+        // bookmarks:[]
     },
     reducers:{
         setAuthUser:(state,action)=>{
@@ -21,7 +22,13 @@ const authSlice = createSlice({
         },
         setSelectedUser:(state,action)=>{
             state.selectedUser = action.payload
-        }
+        },
+        // saveBookmark:(state,action)=>{
+        //     state.bookmarks = state.bookmarks.push(action.payload)
+        // },
+        // removeBookmark:(state,action)=>{
+        //     state.bookmarks = state.bookmarks.filter((id)=>id !== action.payload)
+        // }
     }
 });
 

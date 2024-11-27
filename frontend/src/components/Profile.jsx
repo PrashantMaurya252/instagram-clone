@@ -1,28 +1,69 @@
 import useGetUserProfile from "@/hooks/useGetUserProfile";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Link, useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { AtSign, Heart, MessageCircle } from "lucide-react";
 import { useState } from "react";
+import axios from "axios";
+import { toast } from "sonner";
+import { setAuthUser, setUserProfile } from "@/redux/authSlice";
 
 const Profile = () => {
   const params = useParams();
   const userId = params.id;
+
+  const { userProfile, user } = useSelector((store) => store.auth);
   useGetUserProfile(userId);
-  const { userProfile,user } = useSelector((store) => store.auth);
   const [activeTab, setActiveTab] = useState("posts");
+  const [followers, setFollowers] = useState(userProfile?.followers);
+  const [userFollowing, setUserFollowing] = useState(user?.following);
+  const dispatch = useDispatch();
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
 
-  const isLoggedInUserProfile = user?._id === userProfile?._id
-  const isFollowing = true;
+  const isLoggedInUserProfile = user?._id === userProfile?._id;
 
   const displayedPost =
     activeTab === "posts" ? userProfile?.posts : userProfile?.bookmarks;
+
+  const followUnFollowHandler = async () => {
+    try {
+      const res = await axios.post(
+        `http://localhost:8000/api/v1/user/followorunfollow/${userId}`,
+        {},
+        { withCredentials: true }
+      );
+      if (res.data.success) {
+        toast.success(res.data.message);
+        let updatedFollowers = [];
+        let updatedFollowing = [];
+
+        if (followers) {
+          updatedFollowers = followers?.includes(user._id)
+            ? followers?.filter((item) => item != user._id)
+            : (updatedFollowers = [...followers, user._id]);
+          updatedFollowing = userFollowing?.includes(userId)
+            ? userFollowing?.filter((item) => item != userId)
+            : (updatedFollowers = [...followers, userId]);
+        }
+
+        setFollowers(updatedFollowers);
+        setUserFollowing(updatedFollowing);
+        dispatch(
+          setUserProfile({ ...userProfile, followers: updatedFollowers })
+        );
+
+        dispatch(setAuthUser({ ...user, following: updatedFollowing }));
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message);
+    }
+  };
 
   return (
     <div className="flex max-w-5xl justify-center mx-auto pl-10">
@@ -43,7 +84,7 @@ const Profile = () => {
                 <span>{userProfile?.username}</span>
                 {isLoggedInUserProfile ? (
                   <div className="flex gap-2">
-                    <Link to='/account/edit'>
+                    <Link to="/account/edit">
                       <Button
                         variant="secondary"
                         className="hover:bg-gray-200 h-8"
@@ -65,9 +106,13 @@ const Profile = () => {
                       Ad tools
                     </Button>
                   </div>
-                ) : isFollowing ? (
+                ) : followers?.includes(user._id) ? (
                   <>
-                    <Button variant="secondary" className=" h-8 ">
+                    <Button
+                      variant="secondary"
+                      className=" h-8 "
+                      onClick={followUnFollowHandler}
+                    >
                       Unfollow
                     </Button>
                     <Button variant="secondary" className=" h-8 ">
@@ -78,6 +123,7 @@ const Profile = () => {
                   <Button
                     variant="secondary"
                     className="bg-[#0095F6] h-8 hover:bg-[#3192d2]"
+                    onClick={followUnFollowHandler}
                   >
                     Follow
                   </Button>
@@ -90,12 +136,15 @@ const Profile = () => {
                   </span>{" "}
                   posts
                 </p>
-                <p>
-                  <span className="font-semibold">
-                    {userProfile?.followers?.length}{" "}
-                  </span>{" "}
-                  followers
-                </p>
+                <Link to={`/followers/${userProfile._id}`}>
+                  <p>
+                    <span className="font-semibold">
+                      {userProfile?.followers?.length}{" "}
+                    </span>{" "}
+                    followers
+                  </p>
+                </Link>
+
                 <p>
                   <span className="font-semibold">
                     {userProfile?.following?.length}{" "}
