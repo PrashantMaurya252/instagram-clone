@@ -14,6 +14,7 @@ import { setOnlineUsers } from "./redux/chatSlice";
 import { setLikeNotification } from "./redux/rtnSlice";
 import ProtectedRoutes from "./components/ProtectedRoutes";
 import FollowersPage from "./components/FollowersPage";
+import FollowingPage from "./components/FollowingPage";
 const browserRouter = createBrowserRouter([
   {
     path: "/",
@@ -38,6 +39,10 @@ const browserRouter = createBrowserRouter([
       {
         path: "/followers/:id",
         element: <ProtectedRoutes><FollowersPage/></ProtectedRoutes> ,
+      },
+      {
+        path: "/following/:id",
+        element: <ProtectedRoutes><FollowingPage/></ProtectedRoutes> ,
       },
     ],
   },
@@ -69,12 +74,12 @@ function App() {
 
       // listening all the events
       socketio.on('getOnlineUsers',(onlineUsers)=>{
-        console.log(onlineUsers,"online users")
+        
         dispatch(setOnlineUsers(onlineUsers))
       })
 
       socketio.on('notification',(notification)=>{
-        console.log(notification,"notification frontend")
+        
         dispatch(setLikeNotification(notification))
       })
 

@@ -142,7 +142,7 @@ export const disLikePost = async (req, res) => {
         userId: userId,
         userDetails: user,
         postId,
-        message: "Your post was liked",
+        message: "Your post was disliked",
       };
 
       const postOwnerSocketId = await getReceiverSocketId(postOwnerId);

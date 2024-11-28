@@ -4,6 +4,7 @@ const rtnSlice = createSlice({
     name:'realTimeNotification',
     initialState:{
         likeNotification:[],
+        messageNotificatio:[],
     },
     reducers:{
         setLikeNotification:(state,action)=>{
@@ -12,9 +13,12 @@ const rtnSlice = createSlice({
             }else if(action.payload.type === 'dislike'){
                 state.likeNotification =state.likeNotification.filter((item)=>item.userId !== action.payload.userId)
             }
+        },
+        setMessageNotification:(state,action)=>{
+            state.messageNotificatio = action.payload
         }
     }
 })
 
-export const {setLikeNotification} = rtnSlice.actions
+export const {setLikeNotification,setMessageNotification} = rtnSlice.actions
 export default rtnSlice.reducer

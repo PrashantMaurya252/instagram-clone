@@ -145,12 +145,14 @@ const Profile = () => {
                   </p>
                 </Link>
 
-                <p>
-                  <span className="font-semibold">
-                    {userProfile?.following?.length}{" "}
-                  </span>{" "}
-                  following
-                </p>
+                <Link to={`/following/${userProfile._id}`}>
+                  <p>
+                    <span className="font-semibold">
+                      {userProfile?.following?.length}{" "}
+                    </span>{" "}
+                    following
+                  </p>
+                </Link>
               </div>
               <div className="flex flex-col gap-1">
                 <span>{userProfile?.bio || "Bio here..."}</span>
