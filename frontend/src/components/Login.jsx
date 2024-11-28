@@ -69,7 +69,6 @@ const Login = () => {
                 <h1 className="text-center font-bold text-xl">LOGO</h1>
                 <p className="text-sm text-center">Login to see photos & videos from your friends</p>
             </div>
-            ``
             <div>
                 <Label>Email</Label>
                 <Input type="text" name="email" value={input.email} onChange={changeEventHandler} className="focus-visible:ring-transparent my-2"/>

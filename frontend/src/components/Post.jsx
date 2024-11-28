@@ -223,7 +223,7 @@ const Post = ({ post }) => {
         </div>
         <div className={`${user._id === post?.author._id ? 'hidden':''}`}>
         {bookmarks?.includes(post?._id) ? (
-          <BookmarkCheckIcon onClick={bookmarkHandler} />
+          <BookmarkCheckIcon onClick={bookmarkHandler} className="cursor-pointer"/>
         ) : (
           <Bookmark
             onClick={bookmarkHandler}

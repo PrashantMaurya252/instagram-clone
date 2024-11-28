@@ -21,7 +21,7 @@ const useGetUserProfile=(userId)=>{
                 console.log(error)
             }
         }
-        fetchUserProfile()
+        if(userId) fetchUserProfile()
     },[userId])
 }
 

@@ -21,7 +21,7 @@ const FollowingPage = () => {
   const params = useParams();
   const currentUserId = params.id;
   const [userFollowing, setUserFollowing] = useState(null);
-  const [followers, setFollowers] = useState(user?.followers);
+  // const [followers, setFollowers] = useState(user?.followers);
   const dispatch = useDispatch();
 
   const allFollowers = async () => {
@@ -39,6 +39,10 @@ const FollowingPage = () => {
       toast.error(error.response.data.message);
     }
   };
+
+  // useEffect(() => {
+  //   allFollowers();
+  // }, []);
   const unfollowHandler = async (userId) => {
     try {
       const res = await axios.post(
@@ -47,15 +51,15 @@ const FollowingPage = () => {
         { withCredentials: true }
       );
       if (res.data.success) {
-        let updatedFollowers = [];
+        let updatedFollowing = [];
         if (userFollowing) {
-            updatedFollowers = followers?.includes(userId)
-            ? followers.filter((item) => item !== userId)
-            : [...followers, userId];
+            updatedFollowing = userFollowing?.includes(userId)
+            ? userFollowing.filter((item) => item !== userId)
+            : [...userFollowing, userId];
         }
 
-        setFollowers(updatedFollowers);
-        dispatch(setAuthUser({ ...user, followers: updatedFollowers }));
+        setUserFollowing(updatedFollowing);
+        dispatch(setAuthUser({ ...userFollowing, following: updatedFollowing }));
         toast.success(res.data.message);
       }
     } catch (error) {
@@ -64,13 +68,11 @@ const FollowingPage = () => {
     }
   };
 
-  useEffect(() => {
-    allFollowers();
-  }, []);
+  
 
   return (
     <div className="max-w-5xl mx-auto">
-      <h1 className="py-5 px-2 font-semibold text-lg">Following</h1>
+      {/* <h1 className="py-5 px-2 font-semibold text-lg">Following</h1>
       <Table>
         <TableCaption>A list of user following</TableCaption>
         <TableHeader>
@@ -110,7 +112,7 @@ const FollowingPage = () => {
                       className="border-[2px] border-blue-400 py-1 px-3 font-semibold rounded-[5px] text-blue-400 hover:bg-blue-400 hover:text-white"
                       onClick={() => unfollowHandler(item._id)}
                     >
-                      {followers.includes(item._id)
+                      {user?.following.includes(item._id)
                         ? "Unfollow"
                         : "Follow"}
                     </button>
@@ -119,7 +121,10 @@ const FollowingPage = () => {
               </TableRow>
             </TableBody>
           ))}
-      </Table>
+      </Table> */}
+      <div className="min-h-screen w-full flex justify-center items-center">
+        <h1 className="font-bold">This page is not completed</h1>
+      </div>
     </div>
   );
 };
