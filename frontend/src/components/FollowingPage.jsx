@@ -55,7 +55,7 @@ const FollowingPage = () => {
         { withCredentials: true }
       );
       if (res.data.success) {
-        let updatedFollowing = [];
+        // let updatedFollowing = [];
         // let updatedFollowers = [];
         let authUserUpdatedFollowing = []
         if (authUserFollowing) {
@@ -63,20 +63,21 @@ const FollowingPage = () => {
             ? authUserFollowing.filter((item) => item !== user?.Id)
             : [...authUserFollowing, user._id];
 
-            updatedFollowing = userFollowing?.includes(user?.Id)
-            ? userFollowing.filter((item) => item !== user?.Id)
-            : [...userFollowing, user._id];
+            // updatedFollowing = userFollowing?.includes(user?.Id)
+            // ? userFollowing.filter((item) => item !== user?.Id)
+            // : [...userFollowing, user._id];
 
             // updatedFollowers= followers?.includes(currentUserId) ? followers?.filter((item)=>item !== currentUserId):[...followers,currentUserId]
         }
 
-        setUserFollowing(updatedFollowing);
+        // setUserFollowing(updatedFollowing);
         // setFollowers(updatedFollowers);
         setAuthUserFollowing(authUserUpdatedFollowing)
-        dispatch(setUserProfile({ ...userProfile, following: updatedFollowing }));
+        // dispatch(setUserProfile({ ...userProfile, following: updatedFollowing }));
         // dispatch(setAuthUser({...user,followers:updatedFollowers}))
         dispatch(setAuthUser({...user,following:authUserUpdatedFollowing}))
         toast.success(res.data.message);
+        allFollowings()
       }
     } catch (error) {
       console.log(error);
