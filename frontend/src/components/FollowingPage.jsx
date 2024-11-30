@@ -14,17 +14,17 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
 import { useParams } from "react-router-dom";
-import { setAuthUser } from "@/redux/authSlice";
+import { setAuthUser, setUserProfile } from "@/redux/authSlice";
 
 const FollowingPage = () => {
-  const { user } = useSelector((store) => store.auth);
+  const { user,userProfile } = useSelector((store) => store.auth);
   const params = useParams();
   const currentUserId = params.id;
-  const [userFollowing, setUserFollowing] = useState(null);
-  // const [followers, setFollowers] = useState(user?.followers);
+  const [userFollowing, setUserFollowing] = useState([]);
+  const [followers, setFollowers] = useState([]);
   const dispatch = useDispatch();
 
-  const allFollowers = async () => {
+  const allFollowings = async () => {
     try {
       const res = await axios.get(
         `http://localhost:8000/api/v1/user/allfollowing/${currentUserId}`,
@@ -32,7 +32,7 @@ const FollowingPage = () => {
       );
 
       if (res.data.success) {
-        setUserFollowing(res?.data.userFollowing);
+        setUserFollowing(res?.data.userFollowing || []);
       }
     } catch (error) {
       console.log(error);
@@ -40,9 +40,10 @@ const FollowingPage = () => {
     }
   };
 
-  // useEffect(() => {
-  //   allFollowers();
-  // }, []);
+  useEffect(() => {
+    allFollowings();
+    setFollowers(user?.followers || [])
+  }, [currentUserId]);
   const unfollowHandler = async (userId) => {
     try {
       const res = await axios.post(
@@ -52,14 +53,19 @@ const FollowingPage = () => {
       );
       if (res.data.success) {
         let updatedFollowing = [];
+        let updatedFollowers = []
         if (userFollowing) {
             updatedFollowing = userFollowing?.includes(userId)
             ? userFollowing.filter((item) => item !== userId)
             : [...userFollowing, userId];
+
+            updatedFollowers= followers?.includes(currentUserId) ? followers?.filter((item)=>item !== currentUserId):[followers,currentUserId]
         }
 
         setUserFollowing(updatedFollowing);
-        dispatch(setAuthUser({ ...userFollowing, following: updatedFollowing }));
+        setFollowers(updatedFollowers)
+        dispatch(setUserProfile({ ...userProfile, following: updatedFollowing }));
+        dispatch(setAuthUser({...user,followers:updatedFollowers}))
         toast.success(res.data.message);
       }
     } catch (error) {
@@ -72,7 +78,7 @@ const FollowingPage = () => {
 
   return (
     <div className="max-w-5xl mx-auto">
-      {/* <h1 className="py-5 px-2 font-semibold text-lg">Following</h1>
+      <h1 className="py-5 px-2 font-semibold text-lg">Following</h1>
       <Table>
         <TableCaption>A list of user following</TableCaption>
         <TableHeader>
@@ -121,10 +127,10 @@ const FollowingPage = () => {
               </TableRow>
             </TableBody>
           ))}
-      </Table> */}
-      <div className="min-h-screen w-full flex justify-center items-center">
+      </Table>
+      {/* <div className="min-h-screen w-full flex justify-center items-center">
         <h1 className="font-bold">This page is not completed</h1>
-      </div>
+      </div> */}
     </div>
   );
 };
