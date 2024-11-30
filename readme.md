@@ -31,7 +31,7 @@ A full-stack application replicating core functionalities of Instagram, includin
 
 Below is the database schema used in the application:
 
-![Database Diagram](https://dbdiagram.io/d/674b3b21e9daa85aca390f0e).
+[View Live Database Diagram on dbdiagram.io](https://dbdiagram.io/d/674b3b21e9daa85aca390f0e)
 
 ---
 
