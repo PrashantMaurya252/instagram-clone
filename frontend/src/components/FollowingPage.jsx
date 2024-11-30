@@ -44,6 +44,7 @@ const FollowingPage = () => {
     allFollowings();
     setFollowers(user?.followers || [])
   }, [currentUserId]);
+
   const unfollowHandler = async (userId) => {
     try {
       const res = await axios.post(
@@ -55,11 +56,11 @@ const FollowingPage = () => {
         let updatedFollowing = [];
         let updatedFollowers = []
         if (userFollowing) {
-            updatedFollowing = userFollowing?.includes(userId)
-            ? userFollowing.filter((item) => item !== userId)
-            : [...userFollowing, userId];
+            updatedFollowing = userFollowing?.includes(user._id)
+            ? userFollowing.filter((item) => item !== user._id)
+            : [...userFollowing, user._id];
 
-            updatedFollowers= followers?.includes(currentUserId) ? followers?.filter((item)=>item !== currentUserId):[followers,currentUserId]
+            updatedFollowers= followers?.includes(currentUserId) ? followers?.filter((item)=>item !== currentUserId):[...followers,currentUserId]
         }
 
         setUserFollowing(updatedFollowing);
