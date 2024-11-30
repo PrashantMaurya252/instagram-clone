@@ -13,11 +13,12 @@ import { setAuthUser, setUserProfile } from "@/redux/authSlice";
 const Profile = () => {
   const params = useParams();
   const userId = params.id;
+  useGetUserProfile(userId);
  
   
 
   const { userProfile, user } = useSelector((store) => store.auth);
-  useGetUserProfile(userId);
+  
   
   const [activeTab, setActiveTab] = useState("posts");
   const [followers, setFollowers] = useState(userProfile?.followers);
