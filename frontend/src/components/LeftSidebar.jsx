@@ -32,7 +32,7 @@ const LeftSidebar = () => {
 
   const logoutHandler = async () => {
     try {
-      const res = await axios.get("http://localhost:8000/api/v1/user/logout", {
+      const res = await axios.get("https://instagram-clone-awa2.onrender.com/api/v1/user/logout", {
         withCredentials: true,
       });
       if (res.data.success) {
@@ -89,7 +89,9 @@ const LeftSidebar = () => {
       </div>
 
       <div className="screen-1350:hidden flex flex-col">
-        <h1 className="my-8 pl-3 font-bold text-xl">LOGO</h1>
+        <div className="my-8 pl-3 font-bold text-xl">
+          <img src="https://i.pinimg.com/236x/e3/e6/d1/e3e6d1c4355a6213f8e7ec88d5ced07b.jpg" alt="logo" className="w-[50px] h-[50px] object-contain rounded-xl"/>
+        </div>
         <div>
           {sidebarItems.map((item, index) => {
             return (

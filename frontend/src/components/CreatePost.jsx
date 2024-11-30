@@ -48,7 +48,7 @@ const CreatePost = ({ open, setOpen }) => {
     setLoading(true);
     try {
       const res = await axios.post(
-        "http://localhost:8000/api/v1/post/addpost",
+        "https://instagram-clone-awa2.onrender.com/api/v1/post/addpost",
         formData,
         {
           headers: {
