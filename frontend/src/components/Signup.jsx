@@ -68,7 +68,7 @@ const Signup = () => {
             <img
               src="https://i.pinimg.com/236x/e3/e6/d1/e3e6d1c4355a6213f8e7ec88d5ced07b.jpg"
               alt="logo"
-              className="w-[30px] h-[30px] object-cover rounded-xl"
+              className="w-[50px] h-[50px] object-cover rounded-xl"
             />
           </div>
                 <p className="text-sm text-center">Signup to see photos & videos from your friends</p>
