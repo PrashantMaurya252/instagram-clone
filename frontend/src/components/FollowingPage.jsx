@@ -22,6 +22,7 @@ const FollowingPage = () => {
   const currentUserId = params.id;
   const [userFollowing, setUserFollowing] = useState([]);
   const [followers, setFollowers] = useState([]);
+  const [authUserFollowing,setAuthUserFollowing] = useState([])
   const dispatch = useDispatch();
 
   const allFollowings = async () => {
@@ -43,6 +44,7 @@ const FollowingPage = () => {
   useEffect(() => {
     allFollowings();
     setFollowers(user?.followers || [])
+    setAuthUserFollowing(user?.following || [])
   }, [currentUserId]);
 
   const unfollowHandler = async (userId) => {
@@ -53,20 +55,23 @@ const FollowingPage = () => {
         { withCredentials: true }
       );
       if (res.data.success) {
-        let updatedFollowing = [];
-        let updatedFollowers = []
-        if (userFollowing) {
-            updatedFollowing = userFollowing?.includes(user._id)
-            ? userFollowing.filter((item) => item !== user._id)
-            : [...userFollowing, user._id];
+        // let updatedFollowing = [];
+        // let updatedFollowers = [];
+        let authUserUpdatedFollowing = []
+        if (authUserFollowing) {
+          authUserUpdatedFollowing = authUserUpdatedFollowing?.includes(user?.Id)
+            ? authUserUpdatedFollowing.filter((item) => item !== user?.Id)
+            : [...authUserUpdatedFollowing, user._id];
 
-            updatedFollowers= followers?.includes(currentUserId) ? followers?.filter((item)=>item !== currentUserId):[...followers,currentUserId]
+            // updatedFollowers= followers?.includes(currentUserId) ? followers?.filter((item)=>item !== currentUserId):[...followers,currentUserId]
         }
 
-        setUserFollowing(updatedFollowing);
-        setFollowers(updatedFollowers)
-        dispatch(setUserProfile({ ...userProfile, following: updatedFollowing }));
-        dispatch(setAuthUser({...user,followers:updatedFollowers}))
+        // setUserFollowing(updatedFollowing);
+        // setFollowers(updatedFollowers);
+        setAuthUserFollowing(authUserUpdatedFollowing)
+        // dispatch(setUserProfile({ ...userProfile, following: updatedFollowing }));
+        // dispatch(setAuthUser({...user,followers:updatedFollowers}))
+        dispatch(setAuthUser({...user,following:authUserUpdatedFollowing}))
         toast.success(res.data.message);
       }
     } catch (error) {
