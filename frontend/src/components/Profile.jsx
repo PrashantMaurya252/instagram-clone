@@ -119,7 +119,7 @@ const Profile = () => {
                       Ad tools
                     </Button>
                   </div>
-                ) : followers?.includes(user._id) ? (
+                ) : userFollowing?.includes(userId) ? (
                   <>
                     <Button
                       variant="secondary"

@@ -59,8 +59,8 @@ const FollowingPage = () => {
         // let updatedFollowers = [];
         let authUserUpdatedFollowing = []
         if (authUserFollowing) {
-          authUserUpdatedFollowing = authUserFollowing?.includes(user?.Id)
-            ? authUserFollowing.filter((item) => item !== user?.Id)
+          authUserUpdatedFollowing = authUserFollowing?.includes(user?._id)
+            ? authUserFollowing.filter((item) => item !== user?._id)
             : [...authUserFollowing, user._id];
 
             // updatedFollowing = userFollowing?.includes(user?.Id)
