@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { AtSign, Heart, MessageCircle } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "sonner";
 import { setAuthUser, setUserProfile } from "@/redux/authSlice";
@@ -21,15 +21,22 @@ const Profile = () => {
   
   
   const [activeTab, setActiveTab] = useState("posts");
-  const [followers, setFollowers] = useState(userProfile?.followers || []);
-  const [userFollowing, setUserFollowing] = useState(user?.following || []);
+  const [followers, setFollowers] = useState([]);
+  const [userFollowing, setUserFollowing] = useState([]);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    setFollowers(userProfile?.followers || []);
+    setUserFollowing(user?.following || []);
+}, [userProfile, user]);
+
+  
+
+  if(!user || ! userProfile) return <h1>Please wait data is fetchng...</h1>
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
-
-  if(!user || ! userProfile) return <h1>Please wait data is fetchng</h1>
 
   const isLoggedInUserProfile = user?._id === userProfile?._id;
 
@@ -51,10 +58,10 @@ const Profile = () => {
         if (followers) {
           updatedFollowers = followers?.includes(user._id)
             ? followers?.filter((item) => item != user._id)
-            : (updatedFollowers = [...followers, user._id]);
+            :  [...followers, user._id];
           updatedFollowing = userFollowing?.includes(userId)
             ? userFollowing?.filter((item) => item != userId)
-            : (updatedFollowers = [...followers, userId]);
+            :  [...followers, userId];
         }
 
         setFollowers(updatedFollowers);

@@ -89,8 +89,8 @@ const LeftSidebar = () => {
       </div>
 
       <div className="screen-1350:hidden flex flex-col">
-        <div className="my-8 pl-3 font-bold text-xl">
-          <img src="https://i.pinimg.com/236x/e3/e6/d1/e3e6d1c4355a6213f8e7ec88d5ced07b.jpg" alt="logo" className="w-[50px] h-[50px] object-contain rounded-xl"/>
+        <div className="my-8 pl-3  flex justify-center items-center">
+          <img src="https://i.pinimg.com/236x/e3/e6/d1/e3e6d1c4355a6213f8e7ec88d5ced07b.jpg" alt="logo" className="w-[50px] h-[50px] object-cover rounded-xl"/>
         </div>
         <div>
           {sidebarItems.map((item, index) => {
