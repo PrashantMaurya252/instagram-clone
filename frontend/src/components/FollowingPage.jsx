@@ -129,7 +129,7 @@ const FollowingPage = () => {
                       className="border-[2px] border-blue-400 py-1 px-3 font-semibold rounded-[5px] text-blue-400 hover:bg-blue-400 hover:text-white"
                       onClick={() => unfollowHandler(item._id)}
                     >
-                      {user?.following.includes(item._id)
+                      {authUserFollowing?.includes(item._id)
                         ? "Unfollow"
                         : "Follow"}
                     </button>
