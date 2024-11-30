@@ -21,13 +21,15 @@ const Profile = () => {
   
   
   const [activeTab, setActiveTab] = useState("posts");
-  const [followers, setFollowers] = useState(userProfile?.followers);
-  const [userFollowing, setUserFollowing] = useState(user?.following);
+  const [followers, setFollowers] = useState(userProfile?.followers || []);
+  const [userFollowing, setUserFollowing] = useState(user?.following || []);
   const dispatch = useDispatch();
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
+
+  if(!user || ! userProfile) return <h1>Please wait data is fetchng</h1>
 
   const isLoggedInUserProfile = user?._id === userProfile?._id;
 
