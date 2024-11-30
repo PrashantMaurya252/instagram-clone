@@ -64,7 +64,13 @@ const Signup = () => {
     <div className="flex items-center w-screen h-screen justify-center">
         <form onSubmit={signupHandler} className="shadow-lg flex flex-col gap-5 p-8">
             <div className="my-4">
-                <h1 className="text-center font-bold text-xl">LOGO</h1>
+            <div className="my-8 pl-3  flex justify-center items-center">
+            <img
+              src="https://i.pinimg.com/236x/e3/e6/d1/e3e6d1c4355a6213f8e7ec88d5ced07b.jpg"
+              alt="logo"
+              className="w-[30px] h-[30px] object-cover rounded-xl"
+            />
+          </div>
                 <p className="text-sm text-center">Signup to see photos & videos from your friends</p>
             </div>
             <div>
