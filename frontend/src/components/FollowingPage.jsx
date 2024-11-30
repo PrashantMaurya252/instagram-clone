@@ -27,7 +27,7 @@ const FollowingPage = () => {
   const allFollowings = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:8000/api/v1/user/allfollowing/${currentUserId}`,
+        `https://instagram-clone-awa2.onrender.com/api/v1/user/allfollowing/${currentUserId}`,
         { withCredentials: true }
       );
 
