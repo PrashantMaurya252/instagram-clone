@@ -6,7 +6,7 @@ import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { AtSign, Heart, MessageCircle } from "lucide-react";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "@/lib/api";
 import { toast } from "sonner";
 import { setAuthUser, setUserProfile } from "@/redux/authSlice";
 
@@ -45,8 +45,7 @@ const Profile = () => {
 
   const followUnFollowHandler = async () => {
     try {
-      const res = await axios.post(
-        `https://instagram-clone-awa2.onrender.com/api/v1/user/followorunfollow/${userId}`,
+      const res = await api.post(`/api/v1/user/followorunfollow/${userId}`,
         {},
         { withCredentials: true }
       );

@@ -15,7 +15,7 @@ import CommentDialog from "./CommentDialog";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
-import axios from "axios";
+import api from "@/lib/api";
 import { setPosts, setSelectedPost } from "@/redux/postSlice";
 import { Badge } from "./ui/badge";
 import { setAuthUser, setUserProfile } from "@/redux/authSlice";
@@ -43,8 +43,7 @@ const Post = ({ post }) => {
   const likeOrDislikeHandler = async () => {
     try {
       const action = liked ? "dislike" : "like";
-      const res = await axios.get(
-        `https://instagram-clone-awa2.onrender.com/api/v1/post/${post._id}/${action}`,
+      const res = await api.get(`/api/v1/post/${post._id}/${action}`,
         { withCredentials: true }
       );
 
@@ -73,8 +72,7 @@ const Post = ({ post }) => {
 
   const deletePostHandler = async () => {
     try {
-      const res = await axios.delete(
-        `https://instagram-clone-awa2.onrender.com/api/v1/post/delete/${post?._id}`,
+      const res = await api.delete(`/api/v1/post/delete/${post?._id}`,
         { withCredentials: true }
       );
 
@@ -93,8 +91,7 @@ const Post = ({ post }) => {
 
   const commentHandler = async () => {
     try {
-      const res = await axios.post(
-        `https://instagram-clone-awa2.onrender.com/api/v1/post/${post._id}/comment`,
+      const res = await api.post(`/api/v1/post/${post._id}/comment`,
         { text },
         {
           headers: {
@@ -124,8 +121,7 @@ const Post = ({ post }) => {
 
   const bookmarkHandler = async () => {
     try {
-      const res = await axios.get(
-        `https://instagram-clone-awa2.onrender.com/api/v1/post/${post._id}/bookmark`,
+      const res = await api.get(`/api/v1/post/${post._id}/bookmark`,
         { withCredentials: true }
       );
       if (res.data.success) {

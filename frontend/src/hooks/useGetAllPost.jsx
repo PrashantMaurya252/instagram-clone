@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import axios from "axios"
+import api from "@/lib/api";
 import { useDispatch } from "react-redux"
 import { setPosts } from "@/redux/postSlice"
 
@@ -8,7 +8,7 @@ const useGetAllPost=()=>{
     useEffect(()=>{
         const fetchAllPost = async()=>{
             try {
-                const res = await axios.get('https://instagram-clone-awa2.onrender.com/api/v1/post/all',{withCredentials:true})
+                const res = await api.get('/api/v1/post/all',{withCredentials:true})
                 if(res.data.success){
                     
                     dispatch(setPosts(res.data.posts))

@@ -5,7 +5,7 @@ import { Button } from "./ui/button";
 import { MessageCircleCode } from "lucide-react";
 import Messages from "./Messages";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "@/lib/api";
 import { setMessages } from "@/redux/chatSlice";
 
 const ChatPage = () => {
@@ -19,7 +19,7 @@ const ChatPage = () => {
 
   const sendMessageHandler = async(receiverId)=>{
     try {
-      const res = await axios.post(`https://instagram-clone-awa2.onrender.com/api/v1/message/send/${receiverId}`,{message:textMessage},{
+      const res = await api.post(`/api/v1/message/send/${receiverId}`,{message:textMessage},{
         headers:{
           'Content-Type':'application/json'
         },

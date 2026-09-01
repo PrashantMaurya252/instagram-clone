@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "@/lib/api";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
@@ -27,8 +27,7 @@ const FollowingPage = () => {
 
   const allFollowings = async () => {
     try {
-      const res = await axios.get(
-        `https://instagram-clone-awa2.onrender.com/api/v1/user/allfollowing/${currentUserId}`,
+      const res = await api.get(`/api/v1/user/allfollowing/${currentUserId}`,
         { withCredentials: true }
       );
 
@@ -49,8 +48,7 @@ const FollowingPage = () => {
 
   const unfollowHandler = async (userId) => {
     try {
-      const res = await axios.post(
-        `https://instagram-clone-awa2.onrender.com/api/v1/user/followorunfollow/${userId}`,
+      const res = await api.post(`/api/v1/user/followorunfollow/${userId}`,
         {},
         { withCredentials: true }
       );

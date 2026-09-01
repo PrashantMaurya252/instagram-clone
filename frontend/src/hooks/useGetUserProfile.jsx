@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import axios from "axios"
+import api from "@/lib/api";
 import { useDispatch } from "react-redux"
 
 import {  setUserProfile } from "@/redux/authSlice"
@@ -11,7 +11,7 @@ const useGetUserProfile=(userId)=>{
     useEffect(()=>{
         const fetchUserProfile = async()=>{
             try {
-                const res = await axios.get(`https://instagram-clone-awa2.onrender.com/api/v1/user/${userId}/profile`,{withCredentials:true})
+                const res = await api.get(`/api/v1/user/${userId}/profile`,{withCredentials:true})
                 if(res.data.success){
                     
                     

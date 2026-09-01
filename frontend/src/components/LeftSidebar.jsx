@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { toast } from "sonner";
-import axios from "axios";
+import api from "@/lib/api";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setAuthUser } from "@/redux/authSlice";
@@ -32,7 +32,7 @@ const LeftSidebar = () => {
 
   const logoutHandler = async () => {
     try {
-      const res = await axios.get("https://instagram-clone-awa2.onrender.com/api/v1/user/logout", {
+      const res = await api.get("/api/v1/user/logout", {
         withCredentials: true,
       });
       if (res.data.success) {

@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import axios from "axios";
+import api from "@/lib/api";
 import { Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -53,7 +53,7 @@ const EditProfile = () => {
     
     try {
       setLoading(true);
-      const res = await  axios.post('https://instagram-clone-awa2.onrender.com/api/v1/user/profile/edit',formData,{
+      const res = await  api.post('/api/v1/user/profile/edit',formData,{
         headers:{
           'Content-Type':'multipart/form-data'
         },

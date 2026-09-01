@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { toast } from "sonner";
 import { useState } from "react";
-import axios from "axios";
+import api from "@/lib/api";
 import { setAuthUser, setSuggestedUsers } from "@/redux/authSlice";
 
 const SuggestedUser = ({authuser}) => {
@@ -18,8 +18,7 @@ const SuggestedUser = ({authuser}) => {
 
   const followUnFollowHandler = async (userId) => {
     try {
-      const res = await axios.post(
-        `https://instagram-clone-awa2.onrender.com/api/v1/user/followorunfollow/${userId}`,
+      const res = await api.post(`/api/v1/user/followorunfollow/${userId}`,
         {},
         { withCredentials: true }
       );

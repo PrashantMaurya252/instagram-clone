@@ -6,7 +6,7 @@ import { Textarea } from "./ui/textarea";
 import { readFileAsDataURL } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import axios from "axios";
+import api from "@/lib/api";
 import { useDispatch, useSelector } from "react-redux";
 import store from "@/redux/store";
 import { setPosts } from "@/redux/postSlice";
@@ -47,8 +47,7 @@ const CreatePost = ({ open, setOpen }) => {
     if (imagePreview) formData.append("image", file);
     setLoading(true);
     try {
-      const res = await axios.post(
-        "https://instagram-clone-awa2.onrender.com/api/v1/post/addpost",
+      const res = await api.post("/api/v1/post/addpost",
         formData,
         {
           headers: {

@@ -2,7 +2,7 @@ import {  useEffect, useState } from "react"
 import { Input } from "./ui/input"
 import { Label } from "./ui/label"
 import { Button } from "./ui/button"
-import axios from "axios"
+import api from "@/lib/api";
 import { toast } from "sonner"
 import { Link, useNavigate } from "react-router-dom"
 import { Loader2 } from "lucide-react"
@@ -31,7 +31,7 @@ const Signup = () => {
 
         try {
             setLoading(true)
-            const res = await axios.post('https://instagram-clone-awa2.onrender.com/api/v1/user/register',input,{
+            const res = await api.post('/api/v1/user/register',input,{
                 headers:{
                     "Content-Type":'application/json'
                 },

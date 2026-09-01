@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import store from "@/redux/store";
 import Comment from "./Comment";
-import axios from "axios";
+import api from "@/lib/api";
 import { setPosts } from "@/redux/postSlice";
 import { toast } from "sonner";
 
@@ -38,8 +38,7 @@ const CommentDialog = ({ open, setOpen }) => {
     
     const sendMessageHandler = async () => {
       try {
-        const res = await axios.post(
-          `https://instagram-clone-awa2.onrender.com/api/v1/post/${selectedPost._id}/comment`,
+        const res = await api.post(`/api/v1/post/${selectedPost._id}/comment`,
           { text },
           {
             headers: {
