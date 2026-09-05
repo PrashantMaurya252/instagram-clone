@@ -66,7 +66,7 @@ const Signup = () => {
             <div className="my-4">
             <div className="my-8 pl-3  flex justify-center items-center">
             <img
-              src="https://i.pinimg.com/236x/e3/e6/d1/e3e6d1c4355a6213f8e7ec88d5ced07b.jpg"
+              src="/favicon.jpg"
               alt="logo"
               className="w-[50px] h-[50px] object-cover rounded-xl"
             />
