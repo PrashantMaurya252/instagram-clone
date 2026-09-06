@@ -6,6 +6,7 @@ import connectDB from './utils/db.js'
 import userRoute from './routes/userRouter.js'
 import postRoute from './routes/postRoutes.js'
 import messageRoute from './routes/messageRoutes.js'
+import storyRoute from './routes/storyRoutes.js'
 import { app,server } from './socket/socket.js'
 import path from 'path'
 
@@ -38,6 +39,7 @@ const PORT = process.env.PORT
 app.use("/api/v1/user",userRoute)
 app.use("/api/v1/post",postRoute)
 app.use("/api/v1/message",messageRoute)
+app.use("/api/v1/story",storyRoute)
 
 app.use(express.static(path.join(__dirname,"/frontend/dist")))
 app.get("*",(req,res)=>{

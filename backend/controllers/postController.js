@@ -4,6 +4,7 @@ import { Post } from "../models/postModel.js";
 import { User } from "../models/userModel.js";
 import { Comment } from "../models/commentModel.js";
 import { getReceiverSocketId, io } from "../socket/socket.js";
+import mediaModel from "../models/mediaModel.js";
 
 export const addNewPost = async (req, res) => {
   try {
@@ -21,9 +22,20 @@ export const addNewPost = async (req, res) => {
       "base64"
     )}`;
     const cloudResponse = await cloudinary.uploader.upload(fileUri);
+    
+    const mediaDoc = await mediaModel.create({
+      type: "image",
+      url: cloudResponse.secure_url,
+      publicId: cloudResponse.public_id || "unknown",
+      format: cloudResponse.format || "jpeg",
+      width: cloudResponse.width,
+      height: cloudResponse.height,
+      bytes: cloudResponse.bytes,
+    });
+
     const post = await Post.create({
       caption,
-      image: cloudResponse.secure_url,
+      media: mediaDoc._id,
       author: authorId,
     });
 
@@ -34,6 +46,7 @@ export const addNewPost = async (req, res) => {
     }
 
     await post.populate({ path: "author", select: "-password" });
+    await post.populate("media");
     return res.status(201).json({
       message: "New post added",
       post,
@@ -46,8 +59,17 @@ export const addNewPost = async (req, res) => {
 
 export const getAllPost = async (req, res) => {
   try {
-    const posts = await Post.find()
+    const currentUser = await User.findById(req.id);
+    const publicUsers = await User.find({ isPrivate: false }).select('_id');
+    const allowedAuthors = new Set([
+      ...currentUser.following.map(id => id.toString()),
+      currentUser._id.toString(),
+      ...publicUsers.map(u => u._id.toString())
+    ]);
+
+    const posts = await Post.find({ author: { $in: Array.from(allowedAuthors) } })
       .sort({ createdAt: -1 })
+      .populate("media")
       .populate({ path: "author", select: "username profilePicture" })
       .populate({
         path: "comments",
@@ -71,6 +93,7 @@ export const getUserPost = async (req, res) => {
     const authorId = req.id;
     const posts = await Post.find({ author: authorId })
       .sort({ createdAt: -1 })
+      .populate("media")
       .populate({ path: "author", select: "username profilePicture" })
       .populate({
         path: "comments",

@@ -8,7 +8,7 @@ import { Post } from "../models/postModel.js";
 
 export const register = async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    const { username, email, password, isPrivate } = req.body;
     if (!username || !email || !password) {
       return res.status(401).json({
         message: "Something is missing, please check!",
@@ -28,6 +28,7 @@ export const register = async (req, res) => {
       username,
       email,
       password: hashedPassword,
+      isPrivate: isPrivate === true || isPrivate === 'true',
     });
     return res.status(201).json({
       message: "Account created successfully",
