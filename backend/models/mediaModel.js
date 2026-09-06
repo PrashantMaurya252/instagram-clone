@@ -45,7 +45,7 @@ const mediaSchema = new mongoose.Schema(
         },
     },
     {
-        _id: true,
+        timestamps: true
     }
 );
 
