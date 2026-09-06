@@ -22,7 +22,7 @@ export const addNewPost = async (req, res) => {
       "base64"
     )}`;
     const cloudResponse = await cloudinary.uploader.upload(fileUri);
-    
+
     const mediaDoc = await mediaModel.create({
       type: "image",
       url: cloudResponse.secure_url,
